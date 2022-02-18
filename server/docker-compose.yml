@@ -27,10 +27,6 @@ services:
     container_name: deluge
     privileged: true
     network_mode: "service:wireguard"
-    ports:
-      - "8112:8112"
-      - "6881:6881"
-      - "6881:6881/udp"
     environment:
       - PUID=1000
       - PGID=1000
