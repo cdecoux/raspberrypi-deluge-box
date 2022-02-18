@@ -38,7 +38,9 @@ build {
   provisioner "shell" {
     inline = [
       "mv /etc/resolv.conf /etc/resolv.conf.bk",
-      "echo 'nameserver 8.8.8.8' > /etc/resolv.conf"
+      "echo 'nameserver 8.8.8.8' > /etc/resolv.conf",
+      "hostnamectl set-hostname ${local.hostname}",
+      "apt-get update"
     ]
   }
 
@@ -76,4 +78,5 @@ build {
 
 locals {
   pi_user = "pi"
+  hostname = "pi-deluge"
 }
