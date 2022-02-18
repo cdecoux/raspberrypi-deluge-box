@@ -11,4 +11,4 @@ crash.log
 .idea
 
 
-server/conf/*.conf
+conf

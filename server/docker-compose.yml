@@ -1,25 +1,39 @@
-# TODO:
-# WireGuard Service https://docs.linuxserver.io/images/docker-wireguard
-# Deluge Server https://getpocket.com/read/2346884346
----
-version: "2.1"
+version: "3.7"
 services:
   wireguard:
     image: lscr.io/linuxserver/wireguard
-    container_name: wireguard
+    container_name: wireguard-client
+    privileged: true
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=America/Chigaco
       - ALLOWEDIPS=0.0.0.0/0
     ports:
       - "51820:51820/udp"
     volumes:
-      - ./conf/wg0.conf:/config/wg0.conf
+      - ../conf/wg0.conf:/config/wg0.conf
       - /lib/modules:/lib/modules
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
     restart: unless-stopped
+  deluge:
+    image: lscr.io/linuxserver/deluge
+    container_name: deluge
+    privileged: true
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - DELUGE_LOGLEVEL=error
+    ports:
+      - "8112:8112"
+      - "6881:6881"
+      - "6881:6881/udp"
+    restart: unless-stopped
+
+
+networks:
+  default:
+    driver: bridge

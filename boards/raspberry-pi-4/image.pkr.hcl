@@ -34,6 +34,7 @@ source "arm" "deluge" {
 build {
   sources = ["source.arm.deluge"]
 
+  # Init for network
   provisioner "shell" {
     inline = [
       "mv /etc/resolv.conf /etc/resolv.conf.bk",
@@ -41,10 +42,38 @@ build {
     ]
   }
 
+  # Setup Pi User
+  provisioner "shell" {
+    script = "scripts/ubuntu/create-user.sh"
+    environment_vars = ["USER=${local.pi_user}"]
+  }
+
+  # Local configs. Populate these manually!
+  provisioner "file" {
+    source = "conf"
+    destination = "/conf"
+  }
+
+
+  # Configure SSH Host
+  provisioner "shell" {
+    inline = [
+      "mv /conf/authorized_keys /home/${local.pi_user}/.ssh/authorized_keys"
+    ]
+  }
+
+  # Server folder with docker-compose files
+  provisioner "file" {
+    source = "server"
+    destination = "/server"
+  }
+
+  # Install Docker
   provisioner "shell" {
     script = "scripts/ubuntu/install-docker.sh"
   }
+}
 
-  # TODO: authorized-hosts file
-
+locals {
+  pi_user = "pi"
 }
