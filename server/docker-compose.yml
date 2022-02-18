@@ -1,4 +1,3 @@
-version: "3.7"
 services:
   wireguard:
     image: lscr.io/linuxserver/wireguard
@@ -13,6 +12,10 @@ services:
       - ALLOWEDIPS=0.0.0.0/0
     ports:
       - "51820:51820/udp"
+      # These are ports for deluge, opened through the VPN container
+      - "8112:8112"
+      - "6881:6881"
+      - "6881:6881/udp"
     volumes:
       - ../conf/wg0.conf:/config/wg0.conf
       - /lib/modules:/lib/modules
@@ -23,14 +26,15 @@ services:
     image: lscr.io/linuxserver/deluge
     container_name: deluge
     privileged: true
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - DELUGE_LOGLEVEL=error
+    network_mode: "service:wireguard"
     ports:
       - "8112:8112"
       - "6881:6881"
       - "6881:6881/udp"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - DELUGE_LOGLEVEL=error
     restart: unless-stopped
 
 
