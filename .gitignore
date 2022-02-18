@@ -9,3 +9,6 @@ crash.log
 
 # IDE
 .idea
+
+
+server/conf/*.conf
