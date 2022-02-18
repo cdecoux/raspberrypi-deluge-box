@@ -40,6 +40,7 @@ build {
       "mv /etc/resolv.conf /etc/resolv.conf.bk",
       "echo 'nameserver 8.8.8.8' > /etc/resolv.conf",
       "echo ${local.hostname} > /etc/hostname",
+      "cat /etc/hosts | sed 's/127.0.0.1 localhost/127.0.0.1 localhost ${local.hostname}/g' > /tmp/hosts && mv /tmp/hosts /etc/hosts",
       "apt-get update",
       "apt upgrade -y"
     ]
