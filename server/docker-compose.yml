@@ -32,8 +32,34 @@ services:
       - "6881:6881"
       - "6881:6881/udp"
     restart: unless-stopped
+    volumes:
+      - /var/deluge/config:/config
+      - /var/deluge/downloads:/downloads
+  plex:
+    container_name: plex
+    build:
+      context: ./pms-docker
+      dockerfile: Dockerfile.arm64
+    restart: unless-stopped
+    environment:
+      - TZ=US/Central
+    networks:
+      physical:
+        ipv4_address: 192.168.0.5
+    hostname: plex
+    volumes:
+      - /var/plex/config:/config
+      - /var/plex/transcode:/transcode
+      - /var/plex/data:/data
 
 
 networks:
   default:
     driver: bridge
+  physical:
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      config:
+        - subnet: 192.168.0.0/24

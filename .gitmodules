@@ -1,0 +1,3 @@
+[submodule "server/pms-docker"]
+	path = server/pms-docker
+	url = https://github.com/plexinc/pms-docker.git
