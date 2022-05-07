@@ -11,3 +11,4 @@ EOF
 
 
 mkdir /home/$USER/.ssh
+chown pi:pi /home/$USER/.ssh --recursive
