@@ -51,6 +51,7 @@ services:
       - /var/plex/config:/config
       - /var/plex/transcode:/transcode
       - /var/plex/data:/data
+      - /var/deluge:/deluge
 
 
 networks:
